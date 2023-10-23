@@ -9,7 +9,7 @@ public class ARMarkerDetection : MonoBehaviour
 
     private int counter = 0;
     private ARTrackedImage trackedImage;
-    private bool tapped = false;
+    private bool isButtonPressed = false;
 
     void Start()
     {
@@ -40,13 +40,10 @@ public class ARMarkerDetection : MonoBehaviour
 
     void UpdateMarkerDetection(ARTrackedImage trackedImage)
     {
-        if (trackedImage.referenceImage.name == "marker" && tapped)
+        if (trackedImage.referenceImage.name == "marker" && isButtonPressed)
         {
             IncrementCounter();
-        }
-        else
-        {
-            tapped = false;
+            OnButtonReleased();
         }
         UpdateCounterText();
     }
@@ -61,8 +58,13 @@ public class ARMarkerDetection : MonoBehaviour
         counterText.text = counter.ToString();
     }
 
-    public void ModifyTap()
+    public void OnButtonPressed()
     {
-        tapped = true;
+        isButtonPressed = true;
+    }
+
+    public void OnButtonReleased()
+    {
+        isButtonPressed = false;
     }
 }
