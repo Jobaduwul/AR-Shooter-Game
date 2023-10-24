@@ -6,7 +6,7 @@ using TMPro;
 
 public class PlayerCountDisplay : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private TextMeshProUGUI playerCountText;  // Drag your PlayerCountText into this field in the inspector
+    [SerializeField] private TextMeshProUGUI playerCountText;
 
     private void Start()
     {
