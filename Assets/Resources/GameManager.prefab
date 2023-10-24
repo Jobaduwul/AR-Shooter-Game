@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &148912537747837888
+--- !u!1 &5357272380587877194
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,76 +8,68 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 148912537747837891}
-  - component: {fileID: 148912537747837889}
-  - component: {fileID: 5870631262928099136}
-  - component: {fileID: 6328791388356783847}
+  - component: {fileID: 5357272380587877205}
+  - component: {fileID: 5357272380587877204}
+  - component: {fileID: 5357272380587877195}
+  - component: {fileID: 5357272380587877206}
   m_Layer: 0
-  m_Name: Player
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &148912537747837891
+--- !u!4 &5357272380587877205
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148912537747837888}
+  m_GameObject: {fileID: 5357272380587877194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 361.45032, y: -160.64069, z: -164.29309}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &148912537747837889
+--- !u!114 &5357272380587877204
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148912537747837888}
+  m_GameObject: {fileID: 5357272380587877194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Script: {fileID: 11500000, guid: 25f6f932e1319a24ea90f8ecc1c86433, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &5870631262928099136
+  trackedImageManager: {fileID: 0}
+  markerProcessor: {fileID: 5357272380587877195}
+--- !u!114 &5357272380587877195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148912537747837888}
+  m_GameObject: {fileID: 5357272380587877194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a9969c097c8f764695e34f903395c69, type: 3}
+  m_Script: {fileID: 11500000, guid: 7555fc3edb4a3aa40ba2ca959d8ddc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCountText: {fileID: 0}
---- !u!114 &6328791388356783847
+  buttonController: {fileID: 0}
+--- !u!114 &5357272380587877206
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148912537747837888}
+  m_GameObject: {fileID: 5357272380587877194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d0b1bb0a5bcc4c44892f90cd1c55aab, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d6f662c1843fc9488a98c3e1c880c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
