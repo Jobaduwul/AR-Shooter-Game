@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class SyncedVariableController : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    private int bossHealth = 100;
+    public int bossHealth = 100;
+    public int maxBossHealth = 100;
     private PhotonView photonview;
 
     [SerializeField]
