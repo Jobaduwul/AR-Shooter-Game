@@ -4,7 +4,7 @@ using UnityEngine.XR.ARFoundation;
 public class MarkerDetectionManager : MonoBehaviour
 {
     public ARTrackedImageManager trackedImageManager;
-    public MarkerProcessor markerProcessor; // Reference to MarkerProcessor
+    public MarkerProcessor markerProcessor;
 
     void Start()
     {
@@ -15,13 +15,11 @@ public class MarkerDetectionManager : MonoBehaviour
     {
         foreach (var trackedImage in eventArgs.added)
         {
-            // Forward to MarkerProcessor.
             markerProcessor.ProcessMarker(trackedImage);
         }
 
         foreach (var trackedImage in eventArgs.updated)
         {
-            // Forward to MarkerProcessor.
             markerProcessor.ProcessMarker(trackedImage);
         }
     }

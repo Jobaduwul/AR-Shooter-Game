@@ -5,7 +5,7 @@ using Photon.Realtime;
 public class PhotonRoomManager : MonoBehaviourPunCallbacks
 {
     private PlayerCountDisplay playerCountDisplay;
-    private const string roomName = "TheOnlyRoom"; // Fixed room for now
+    private const string roomName = "TheOnlyRoom";
 
     private void Start()
     {
@@ -29,7 +29,6 @@ public class PhotonRoomManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Failed to join the fixed room. The room was: " +roomName);
 
-        // If failed, creating the room
         PhotonNetwork.CreateRoom(roomName);
     }
 
