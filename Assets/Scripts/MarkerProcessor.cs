@@ -16,16 +16,40 @@ public class MarkerProcessor : MonoBehaviour
 
     public void ProcessMarker(ARTrackedImage trackedImage)
     {
-        if (trackedImage.referenceImage.name == "marker" && buttonController.isButtonPressed)
+        if (trackedImage.referenceImage.name == "marker1" && buttonController.isButtonPressed)
         {
-            IncrementCounter();
+            UpdateCounter1();
+            buttonController.OnButtonReleased();
+        }
+
+        if (trackedImage.referenceImage.name == "marker2" && buttonController.isButtonPressed)
+        {
+            UpdateCounter2();
+            buttonController.OnButtonReleased();
+        }
+
+        if (trackedImage.referenceImage.name == "marker3" && buttonController.isButtonPressed)
+        {
+            UpdateCounter3();
             buttonController.OnButtonReleased();
         }
     }
 
-    void IncrementCounter()
+    void UpdateCounter1()
     {
-        counter++;
-        uiManager.UpdateCounterText(counter);
+        //counter++;
+        uiManager.UpdateCounter1Text();
+    }
+
+    void UpdateCounter2()
+    {
+        //counter++;
+        uiManager.UpdateCounter2Text();
+    }
+
+    void UpdateCounter3()
+    {
+        //counter++;
+        uiManager.UpdateCounter3Text();
     }
 }
