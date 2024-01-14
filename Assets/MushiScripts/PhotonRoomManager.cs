@@ -16,13 +16,12 @@ public class PhotonRoomManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Master Server");
-        PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
     {
         Debug.Log("Joined lobby");
-        PhotonNetwork.JoinRoom(roomName);
+        //PhotonNetwork.JoinRoom(roomName);
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
@@ -38,4 +37,5 @@ public class PhotonRoomManager : MonoBehaviourPunCallbacks
 
         playerCountDisplay.UpdatePlayerCount();
     }
+
 }
