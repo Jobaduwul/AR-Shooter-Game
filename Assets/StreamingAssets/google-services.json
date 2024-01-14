@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "285641613802",
+    "project_id": "ar-shooter-game",
+    "storage_bucket": "ar-shooter-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285641613802:android:fac59b6bbeda4459a99293",
+        "android_client_info": {
+          "package_name": "com.mushfiq.arshooter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0H02knn-25SZ0xSjJeS66ZV6MI7owaO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
