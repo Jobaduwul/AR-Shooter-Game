@@ -5,6 +5,8 @@ public class ARObjectPlacement : MonoBehaviour
 {
     public ARSessionOrigin arSessionOrigin;
     public Vector3 offset;
+    public AudioSource shootingSound;
+    public ParticleSystem shootingParticles;
 
     void Start()
     {
@@ -17,6 +19,17 @@ public class ARObjectPlacement : MonoBehaviour
         {
             Debug.LogError("AR Session Origin not found. Make sure it's in your scene.");
         }
+    }
+
+    public void ShootSound()
+
+    {
+        shootingSound.Play();
+    }
+
+    public void ShootEffect()
+    {
+        shootingParticles.Play();
     }
 
     void Update()
