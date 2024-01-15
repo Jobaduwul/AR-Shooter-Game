@@ -10,6 +10,10 @@ using Firebase.Auth;
 
 public class FirebaseManager : MonoBehaviour
 {
+
+
+    public UserManager userManager;
+
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
@@ -42,6 +46,12 @@ public class FirebaseManager : MonoBehaviour
                 Debug.LogError("Could not resolve all Firebase dependencies" + dependencyStatus);
             }
         });
+
+        userManager = FindObjectOfType<UserManager>();
+        if (userManager == null)
+        {
+            Debug.LogError("UserManager not found in the scene. Make sure it's attached to a GameObject.");
+        }
     }
 
     void InitializeFirebase()
@@ -117,6 +127,8 @@ public class FirebaseManager : MonoBehaviour
             // Get the user from the AuthResult
             AuthResult loginTaskResult = loginTask.Result;
             user = loginTaskResult.User;
+
+            UserManager.Instance.SetCurrentUser(user);
 
             Debug.LogFormat("{0} You are successfully Logged In", user.DisplayName);
         }
@@ -224,6 +236,8 @@ public class FirebaseManager : MonoBehaviour
                 }
                 else
                 {
+                    UserManager.Instance.SetCurrentUser(user);
+
                     Debug.Log("Registration Successful. Welcome " + user.DisplayName);
                     // UIManager.Instance.OpenLoginPanel(); // Uncomment if UIManager.Instance is defined elsewhere.
                 }
