@@ -4,7 +4,9 @@ using UnityEngine.XR.ARFoundation;
 public class ARObjectPlacement : MonoBehaviour
 {
     public ARSessionOrigin arSessionOrigin;
+    public Transform playerCamera;
     public Vector3 offset;
+    public Vector3 rotationOffset;
     public AudioSource shootingSound;
     public ParticleSystem shootingParticles;
 
@@ -36,14 +38,8 @@ public class ARObjectPlacement : MonoBehaviour
     {
         if (arSessionOrigin != null)
         {
-            Vector3 cameraPosition = arSessionOrigin.camera.transform.position;
-            Quaternion cameraRotation = arSessionOrigin.camera.transform.rotation;
-
-            Vector3 newPosition = cameraPosition + cameraRotation * offset;
-
-            transform.position = newPosition;
-
-            transform.rotation = cameraRotation;
+            transform.position = playerCamera.position + playerCamera.rotation * offset;
+            transform.rotation = playerCamera.rotation * Quaternion.Euler(rotationOffset);
         }
     }
 }

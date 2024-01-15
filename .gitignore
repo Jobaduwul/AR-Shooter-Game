@@ -46,6 +46,7 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-11_6_0.bundle
 
 # Unity3D generated meta files
 *.pidb.meta
