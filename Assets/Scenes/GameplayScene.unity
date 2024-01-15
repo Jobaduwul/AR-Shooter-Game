@@ -610,7 +610,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 841468060}
         m_TargetAssemblyTypeName: ButtonController, Assembly-CSharp
-        m_MethodName: OnButtonReleased
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -835,7 +835,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arSessionOrigin: {fileID: 0}
+  playerCamera: {fileID: 1354141930}
   offset: {x: 1, y: -2.25, z: 2}
+  rotationOffset: {x: -100, y: 10, z: -15}
   shootingSound: {fileID: 920321321}
   shootingParticles: {fileID: 1635218770}
 --- !u!82 &920321321
@@ -6928,7 +6930,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635218768}
   serializedVersion: 8
-  lengthInSec: 0.05
+  lengthInSec: 0.125
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
