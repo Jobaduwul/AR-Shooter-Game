@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject roomPanel;
     public GameObject gameplayPanel;
 
-    ///
     public GameObject dummyPanel;
 
     public Button readyButton;
@@ -33,7 +32,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
             Destroy(gameObject);
 
-        roomCodeInput = GetComponent<TMP_InputField>();
+        //roomCodeInput = GetComponent<TMP_InputField>();
         photonView = GetComponent<PhotonView>(); 
 
         dummyPanel.SetActive(false);
@@ -78,14 +77,22 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void JoinGame()
     {
-        string roomCode = roomCodeInput.text.ToUpper();
-        Debug.Log("To Join room " + roomCode);
-        Debug.Log("The room is " + roomCode);
-        PhotonNetwork.JoinRoom(roomCode);
-
-        UIhandler(roomCode);
+        string roomCode = roomCodeInput.text;
         
+        if (string.IsNullOrEmpty(roomCode))
+        {
+            Debug.LogError("Room code is null or empty. Please enter a valid room code.");
+        }
+        else
+        {
+            roomCode = roomCode.ToUpper();
+            Debug.Log("To Join room " + roomCode);
+            PhotonNetwork.JoinRoom(roomCode);
+
+            UIhandler(roomCode);
+        }
     }
+
 
     public void ForDebug()
     {
