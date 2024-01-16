@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+using UnityEngine.SceneManagement;
+
+
 
 using Firebase;
 using Firebase.Auth;
@@ -131,6 +134,8 @@ public class FirebaseManager : MonoBehaviour
             UserManager.Instance.SetCurrentUser(user);
 
             Debug.LogFormat("{0} You are successfully Logged In", user.DisplayName);
+
+            SceneManager.LoadScene("RoomScene");
         }
     }
 
@@ -240,6 +245,7 @@ public class FirebaseManager : MonoBehaviour
 
                     Debug.Log("Registration Successful. Welcome " + user.DisplayName);
                     // UIManager.Instance.OpenLoginPanel(); // Uncomment if UIManager.Instance is defined elsewhere.
+                    SceneManager.LoadScene("RoomScene");
                 }
             }
         }

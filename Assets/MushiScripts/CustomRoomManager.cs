@@ -3,7 +3,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Text;
 
-
 public class CustomRoomManager : MonoBehaviourPunCallbacks
 {
     private PlayerCountDisplay playerCountDisplay;
@@ -11,6 +10,9 @@ public class CustomRoomManager : MonoBehaviourPunCallbacks
     private const string lobbyNamePrefix = "Lobby_";
     private const string roomCodeCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private const int roomCodeLength = 6;
+
+    [SerializeField]
+    private TMP_InputField roomCodeInput;
 
     private void Start()
     {
@@ -27,36 +29,47 @@ public class CustomRoomManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Master Server");
-        CreateAndJoinLobby();
+        // When connected to the master server, join the lobby
+        JoinOrCreateLobby();
     }
 
-    private void CreateAndJoinLobby()
+    private void JoinOrCreateLobby()
     {
-        string randomRoomCode = GenerateRandomRoomCode(roomCodeLength);
-        string lobbyName = lobbyNamePrefix + randomRoomCode;
+        if (roomCodeInput != null && !string.IsNullOrEmpty(roomCodeInput.text))
+        {
+            // If there is a room code input, try joining that specific room
+            JoinRoom(roomCodeInput.text.ToUpper());
+        }
+        else
+        {
+            // If no room code input, create a random room
+            CreateRandomRoom();
+        }
+    }
 
+    private void JoinRoom(string roomCode)
+    {
+        string lobbyName = lobbyNamePrefix + roomCode;
         TypedLobby myLobby = new TypedLobby(lobbyName, LobbyType.Default);
         PhotonNetwork.JoinLobby(myLobby);
+    }
+
+    private void CreateRandomRoom()
+    {
+        string randomRoomCode = GenerateRandomRoomCode(roomCodeLength);
+        string roomName = "Room_" + randomRoomCode;
+        PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 10 });
     }
 
     public override void OnJoinedLobby()
     {
         Debug.Log("Joined lobby");
-        CreateRoom();
-    }
-
-    private void CreateRoom()
-    {
-        string randomRoomCode = GenerateRandomRoomCode(roomCodeLength);
-        string roomName = "Room_" + randomRoomCode;
-
-        PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 10 });
+        // No specific action needed here as the room is already joined or created
     }
 
     public override void OnJoinedRoom()
     {
         Debug.Log("Joined a room. Room name: " + PhotonNetwork.CurrentRoom.Name);
-
         playerCountDisplay.UpdatePlayerCount();
 
         if (PhotonNetwork.IsMasterClient)
@@ -77,12 +90,6 @@ public class CustomRoomManager : MonoBehaviourPunCallbacks
         }
 
         return roomCodeBuilder.ToString();
-    }
-
-    // Assume you have a method in UserManager script to get the display name
-    private string GetDisplayName()
-    {
-        return userManager.currentUser.DisplayName;
     }
 
     private void Update()
