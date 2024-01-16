@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Text;
+using TMPro;
 
 public class CustomRoomManager : MonoBehaviourPunCallbacks
 {
@@ -12,7 +14,7 @@ public class CustomRoomManager : MonoBehaviourPunCallbacks
     private const int roomCodeLength = 6;
 
     [SerializeField]
-    private TMP_InputField roomCodeInput;
+    private InputField roomCodeInput;
 
     private void Start()
     {
