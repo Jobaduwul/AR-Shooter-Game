@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
+    public UserManager userManager;
+
     public PhotonView photonView;
 
     public TextMeshProUGUI playerListText;
@@ -116,6 +118,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         //{
             photonView.RPC("LoadGameplayScene", RpcTarget.AllBuffered);
         //}
+        UpdatePlayerList();
 
     }
 
@@ -160,12 +163,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
             else
             {
-                foreach (Player player in PhotonNetwork.PlayerList)
-                {
-                    playerList.AppendLine(player.NickName);
-                }
-                playerListText.text = playerList.ToString();
-                Debug.Log("Player list updated. Players in the room: \n" + playerList.ToString());
+                string temp_user = userManager.GetUserDisplayName();
+                Debug.Log("Player list updated. Players in the room: \n" + temp_user);
             }
         }
         else
