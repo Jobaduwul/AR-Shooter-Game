@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private PhotonView photonView;
 
-    public Text roomCodeText;
+    private Text roomCodeText;
     public GameObject lobbyPanel;
     public GameObject roomPanel;
     public GameObject gameplayPanel;
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public Button readyButton;
     private const int roomCodeLength = 6;
-    private InputField roomCodeInput;
+    public TMP_InputField roomCodeInput;
 
     private void Awake()
     {
@@ -33,11 +33,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
             Destroy(gameObject);
 
-        roomCodeInput = GetComponent<InputField>();
+        roomCodeInput = GetComponent<TMP_InputField>();
+        photonView = GetComponent<PhotonView>(); 
 
         dummyPanel.SetActive(false);
-
-
     }
 
     private void Start()
@@ -73,22 +72,32 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(newRoomCode, roomOptions);
         PhotonNetwork.JoinRoom(newRoomCode);
 
-        Debug.Log("Room Joined" + newRoomCode);
-        roomPanel.SetActive(false);
-        //to be deleted later
-        dummyPanel.SetActive(true);
+        UIhandler(newRoomCode);
     }
 
 
     public void JoinGame()
     {
         string roomCode = roomCodeInput.text.ToUpper();
+        Debug.Log("To Join room " + roomCode);
+        Debug.Log("The room is " + roomCode);
         PhotonNetwork.JoinRoom(roomCode);
+
+        UIhandler(roomCode);
+        
+    }
+
+    public void ForDebug()
+    {
+        //for debug only
+        string roomCode = roomCodeInput.text.ToUpper();
+        Debug.Log("The room is" + roomCode);
+        
     }
 
     public override void OnJoinedRoom()
     {
-        roomCodeText.text = "Room Code: " + PhotonNetwork.CurrentRoom.Name;
+        //roomCodeText.text = "Room Code: " + PhotonNetwork.CurrentRoom.Name;
 
         //if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
         //{
@@ -135,5 +144,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         return roomCodeBuilder.ToString();
+    }
+
+    public void UIhandler(string RoomCode)
+    {
+        Debug.Log("Room Joined" + RoomCode);
+        roomPanel.SetActive(false);
+        //to be deleted later
+        dummyPanel.SetActive(true);
     }
 }
