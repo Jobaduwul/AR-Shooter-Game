@@ -131,7 +131,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         UpdatePlayerCustomProperties(); 
-        //Debug.Log(" in joined room , done executing 'UpdatePlayerCustomProperties' ");// Update custom properties when a player joins
         UpdatePlayerList();
 
         if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
@@ -139,6 +138,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             photonView.RPC("LoadGameplayScene", RpcTarget.AllBuffered);
         }
     }
+
 
     public void Ready()
     {
@@ -176,20 +176,15 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             StringBuilder playerList = new StringBuilder();
 
-            if (PhotonNetwork.PlayerList.Length == 0)
+            foreach (Player player in PhotonNetwork.PlayerList)
             {
-                Debug.Log("Player list is empty.");
+                string playerName = (string)player.CustomProperties["DisplayName"];
+                int playerHealth = (int)player.CustomProperties["Health"];
+                playerList.AppendLine($"{playerName} - Health: {playerHealth}");
             }
-            else
-            {
-                string temp_user = userManager.GetUserDisplayName();
-                if(temp_user != null){
-                    Debug.Log("Player list updated. Players in the room: \n" + temp_user);
-                }
-                else{
-                    Debug.Log("temp user is empty" );
-                }
-            }
+
+            // Update the player list text
+            playerListText.text = playerList.ToString();
         }
         else
         {
@@ -197,25 +192,21 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+
     
     private void UpdatePlayerCustomProperties()
     {
-        Debug.Log(" in 'UpdatePlayerCustomProperties' ");
         string localPlayerId = PhotonNetwork.LocalPlayer.UserId;
         string temp_user = userManager.GetUserDisplayName();
-
-        // Add the player to the local dictionary (for demonstration purposes)
-        playerNames.Add(localPlayerId, temp_user);
-        Debug.Log(" added in dictionary ");
 
         // Create a hashtable to store custom properties
         ExitGames.Client.Photon.Hashtable playerCustomProperties = new ExitGames.Client.Photon.Hashtable();
 
         // Add custom properties
-        playerCustomProperties.Add("DisplayName", temp_user); // Using temp_user instead of localPlayerId for display name
+        playerCustomProperties.Add("Id", localPlayerId);
+        playerCustomProperties.Add("DisplayName", temp_user);
         playerCustomProperties.Add("Health", 10); // Assuming Health is an integer property
-
-        Debug.Log(" added custom properties ");
+        playerCustomProperties.Add("MarkerName", "marker1");
 
         // Set custom properties for the local player
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerCustomProperties);
@@ -224,8 +215,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         Debug.Log("Updated custom properties for local player:");
         Debug.Log("Player ID: " + localPlayerId);
         Debug.Log("Display Name: " + temp_user);
-        Debug.Log("Health: " + PhotonNetwork.LocalPlayer.CustomProperties["Health"]); // Log the current Health property
+        Debug.Log("Health: " + PhotonNetwork.LocalPlayer.CustomProperties["Health"]);
     }
+
 
     [PunRPC]
     private void LoadGameplayScene()
