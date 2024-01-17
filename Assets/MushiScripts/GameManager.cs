@@ -165,8 +165,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (AreAllPlayersReady())
         {
-            Debug.Log("[GameManager] All players are ready. Activating gameplay panel.");
-            gameplayPanel.SetActive(true);
+            Debug.Log("[GameManager] All players are ready. Activating gameplay panel."); 
         }
         else
         {
@@ -176,6 +175,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool AreAllPlayersReady()
     {
+        bool allPlayersReady = true;
+
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             object isPlayerReady;
@@ -183,18 +184,35 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 if (!(bool)isPlayerReady)
                 {
-                    return false;
+                    allPlayersReady = false;
+                    Debug.Log($"[GameManager] Player {player.NickName} is not ready.");
+                }
+                else
+                {
+                    Debug.Log($"[GameManager] Player {player.NickName} is ready.");
                 }
             }
             else
             {
                 // If any player hasn't set their ready status yet
-                return false;
+                allPlayersReady = false;
+                Debug.Log($"[GameManager] Player {player.NickName} has not set their ready status.");
             }
         }
 
-        return true;
+        if (allPlayersReady)
+        {
+            Debug.Log("[GameManager] All players are ready. Activating gameplay panel.");
+            gameplayPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("[GameManager] Waiting for all players to be ready.");
+        }
+
+        return allPlayersReady;
     }
+
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
