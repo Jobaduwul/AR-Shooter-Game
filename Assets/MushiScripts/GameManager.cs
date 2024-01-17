@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public GameObject dummyPanel;
 
-    public Button readyButton;
+    //public Button readyButton;
     private const int roomCodeLength = 6;
     public TMP_InputField roomCodeInput;
 
@@ -140,6 +140,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             photonView.RPC("LoadGameplayScene", RpcTarget.AllBuffered);
         }
+        dummyPanel.SetActive(true);
     }
 
 
@@ -157,18 +158,56 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 
-    public void Ready()
+    [PunRPC]
+    public void PlayerReady()
     {
-        readyButton.interactable = false;
-        photonView.RPC("PlayerReady", RpcTarget.AllBuffered);
+        Debug.Log($"[GameManager] PlayerReady RPC called on {PhotonNetwork.NickName}");
+
+        if (AreAllPlayersReady())
+        {
+            Debug.Log("[GameManager] All players are ready. Activating gameplay panel.");
+            gameplayPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("[GameManager] Waiting for all players to be ready.");
+        }
     }
 
-    [PunRPC]
-    private void PlayerReady()
+    private bool AreAllPlayersReady()
     {
-        if (LobbyManager.Instance.AllPlayersReady())
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
-            photonView.RPC("LoadGameplayScene", RpcTarget.AllBuffered);
+            object isPlayerReady;
+            if (player.CustomProperties.TryGetValue("IsPlayerReady", out isPlayerReady))
+            {
+                if (!(bool)isPlayerReady)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // If any player hasn't set their ready status yet
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (changedProps.ContainsKey("IsPlayerReady"))
+        {
+            Debug.Log($"[GameManager] Player {targetPlayer.NickName}'s ready status updated.");
+            
+            // If this update makes all players ready, activate the gameplay panel
+            if (AreAllPlayersReady())
+            {
+                Debug.Log("[GameManager] All players are now ready. Activating gameplay panel.");
+                gameplayPanel.SetActive(true);
+            }
         }
     }
 
