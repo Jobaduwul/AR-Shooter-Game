@@ -7,9 +7,11 @@ using TMPro;
 public class PlayerCountDisplay : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TextMeshProUGUI playerCountText;
+    private PhotonView photonView;
 
     private void Start()
     {
+        photonView = GetComponent<PhotonView>();
         UpdatePlayerCount();
     }
 
@@ -25,7 +27,10 @@ public class PlayerCountDisplay : MonoBehaviourPunCallbacks
 
     public void UpdatePlayerCount()
     {
-        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        playerCountText.text = $"Number of Players: {playerCount}";
+        if (photonView.IsMine)
+        {
+            int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+            playerCountText.text = $"Number of Players: {playerCount}";
+        }
     }
 }
