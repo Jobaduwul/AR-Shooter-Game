@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
-    public UserManager userManager;
+    public UserManager userManager = UserManager.Instance;
 
     public PhotonView photonView;
 
@@ -164,7 +164,13 @@ public class GameManager : MonoBehaviourPunCallbacks
             else
             {
                 string temp_user = userManager.GetUserDisplayName();
-                Debug.Log("Player list updated. Players in the room: \n" + temp_user);
+                if(temp_user != null){
+                    Debug.Log("Player list updated. Players in the room: \n" + temp_user);
+                }
+                else{
+                    Debug.Log("temp user is empty" );
+                }
+                
             }
         }
         else
