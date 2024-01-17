@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public TextMeshProUGUI playerListText;
 
-    private Text roomCodeText;
+    public TMP_Text roomCodeText;
     public GameObject lobbyPanel;
     public GameObject roomPanel; 
     public GameObject gameplayPanel;
@@ -207,6 +207,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void UIhandler(string RoomCode)
     {
         Debug.Log("Room Joined" + RoomCode);
+        roomCodeText.text = "Room Code: " + RoomCode;
         roomPanel.SetActive(false);
         //to be deleted later
         dummyPanel.SetActive(true);
