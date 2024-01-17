@@ -12,13 +12,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
-    public UserManager userManager = UserManager.Instance;
+    private UserManager userManager;
 
     public PhotonView photonView;
 
     public TextMeshProUGUI playerListText;
 
     public TMP_Text roomCodeText;
+    public TMP_Text playerJoinPrompt;
     public GameObject lobbyPanel;
     public GameObject roomPanel; 
     public GameObject gameplayPanel;
@@ -36,14 +37,26 @@ public class GameManager : MonoBehaviourPunCallbacks
         else
             Destroy(gameObject);
 
-        //roomCodeInput = GetComponent<TMP_InputField>();
         photonView = GetComponent<PhotonView>(); 
 
         dummyPanel.SetActive(false);
         gameplayPanel.SetActive(false);
 
-        playerListText = lobbyPanel.GetComponentInChildren<TextMeshProUGUI>(); // Assuming TextMeshProUGUI is a child of dummyPanel
+        // Find UserManager in the scene and assign it
+        userManager = FindObjectOfType<UserManager>();
+
+        if (userManager == null)
+        {
+            Debug.Log("UserManager not found in the scene.");
+        }
+        else
+        {
+            Debug.Log("UserManager found and assigned in GameManager.");
+        }
+
+        playerListText = lobbyPanel.GetComponentInChildren<TextMeshProUGUI>();
     }
+
 
     private void Start()
     {
@@ -172,6 +185,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                 }
                 
             }
+            //playerJoinPrompt.text.Append(temp_user + " joined.\n");
+            foreach (Player player in PhotonNetwork.PlayerList)
+            {
+                string playerName = userManager.GetUserDisplayName();
+                playerList.Append(playerName + " joined.\n");
+            }
+
+            playerJoinPrompt.text = playerList.ToString();
         }
         else
         {
