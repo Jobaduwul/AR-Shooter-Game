@@ -45,6 +45,7 @@ MonoBehaviour:
   - UpdateHealth
   - UpdatePlayerCustomProperties_RPC
   - UpdatePlayerList_RPC
+  - CalculateAndSetPlayerCount
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

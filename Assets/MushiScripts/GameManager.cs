@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public TextMeshProUGUI playerListText;
 
+    public TextMeshProUGUI playerCount;
+
     private Dictionary<string, string> playerNames = new Dictionary<string, string>();
 
     public TMP_Text roomCodeText;
@@ -31,7 +33,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public GameObject dummyPanel;
 
-    public Button readyButton;
+    //public Button readyButton;
     private const int roomCodeLength = 6;
     public TMP_InputField roomCodeInput;
 
@@ -130,18 +132,47 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        string displayName = userManager.GetUserDisplayName(); // Your existing logic
+        string displayName;
+
+        if (userManager == null)
+        {
+            displayName = "TestUser"; // Set the default display name to "test" if it's null or empty
+        }
+        else
+        {
+            displayName = userManager.GetUserDisplayName();
+        }
         PhotonNetwork.NickName = displayName;
 
         photonView.RPC("UpdatePlayerCustomProperties_RPC", RpcTarget.AllBuffered);
         photonView.RPC("UpdatePlayerList_RPC", RpcTarget.AllBuffered);
+        photonView.RPC("CalculateAndSetPlayerCount", RpcTarget.AllBuffered);
 
         if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
         {
             photonView.RPC("LoadGameplayScene", RpcTarget.AllBuffered);
         }
+        dummyPanel.SetActive(true);
     }
 
+    [PunRPC]
+    public void CalculateAndSetPlayerCount()
+    {
+        Debug.Log("in CalculateAndSetPlayerCount");
+        int playerCountInt = PhotonNetwork.PlayerList.Length;
+        string playerCountStr = $"playercount: {playerCountInt}";
+        if (playerCount != null)
+        {
+            playerCount.text = playerCountStr;
+            Debug.Log($"Player Count Text Updated: {playerCountStr}");
+        }
+        else
+        {
+            Debug.LogError("Player Count Text component not assigned in the Inspector.");
+        }
+
+        Debug.Log($"Player Count: {playerCountInt}");
+    }
 
     [PunRPC]
     private void UpdatePlayerCustomProperties_RPC()
@@ -157,18 +188,90 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 
-    public void Ready()
+    [PunRPC]
+    public void PlayerReady()
     {
-        readyButton.interactable = false;
-        photonView.RPC("PlayerReady", RpcTarget.AllBuffered);
+        Debug.Log($"[GameManager] PlayerReady RPC called on {PhotonNetwork.NickName}");
+
+        // Set the player's "isReady" status to true
+        SetPlayerReadyStatus(true);
+
+        if (AreAllPlayersReady())
+        {
+            Debug.Log("[GameManager] All players are ready. Activating gameplay panel."); 
+        }
+        else
+        {
+            Debug.Log("[GameManager] Waiting for all players to be ready.");
+        }
     }
 
-    [PunRPC]
-    private void PlayerReady()
+    private void SetPlayerReadyStatus(bool isReady)
     {
-        if (LobbyManager.Instance.AllPlayersReady())
+        if (PhotonNetwork.LocalPlayer != null)
         {
-            photonView.RPC("LoadGameplayScene", RpcTarget.AllBuffered);
+            // Update the player's "isReady" status in custom properties
+            ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+            customProperties["IsPlayerReady"] = isReady;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        }
+    }
+
+    private bool AreAllPlayersReady()
+    {
+        bool allPlayersReady = true;
+
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            object isPlayerReady;
+            if (player.CustomProperties.TryGetValue("IsPlayerReady", out isPlayerReady))
+            {
+                if (!(bool)isPlayerReady)
+                {
+                    allPlayersReady = false;
+                    Debug.Log($"[GameManager] Player {player.NickName} is not ready.");
+                }
+                else
+                {
+                    Debug.Log($"[GameManager] Player {player.NickName} is ready.");
+                }
+            }
+            else
+            {
+                // If any player hasn't set their ready status yet
+                allPlayersReady = false;
+                Debug.Log($"[GameManager] Player {player.NickName} has not set their ready status.");
+            }
+        }
+
+        if (allPlayersReady)
+        {
+            Debug.Log("[GameManager] All players are ready. Activating gameplay panel.");
+            dummyPanel.SetActive(true);
+            dummyPanel.SetActive(false);
+            gameplayPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("[GameManager] Waiting for all players to be ready.");
+        }
+
+        return allPlayersReady;
+    }
+
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (changedProps.ContainsKey("IsPlayerReady"))
+        {
+            Debug.Log($"[GameManager] Player {targetPlayer.NickName}'s ready status updated.");
+            
+            // If this update makes all players ready, activate the gameplay panel
+            if (AreAllPlayersReady())
+            {
+                Debug.Log("[GameManager] All players are now ready. Activating gameplay panel.");
+                gameplayPanel.SetActive(true);
+            }
         }
     }
 
