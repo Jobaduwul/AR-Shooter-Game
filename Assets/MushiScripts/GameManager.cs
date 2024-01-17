@@ -12,11 +12,15 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
-    private PhotonView photonView;
+    public UserManager userManager;
+
+    public PhotonView photonView;
+
+    public TextMeshProUGUI playerListText;
 
     private Text roomCodeText;
     public GameObject lobbyPanel;
-    public GameObject roomPanel;
+    public GameObject roomPanel; 
     public GameObject gameplayPanel;
 
     public GameObject dummyPanel;
@@ -36,6 +40,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         photonView = GetComponent<PhotonView>(); 
 
         dummyPanel.SetActive(false);
+        gameplayPanel.SetActive(false);
+
+        playerListText = lobbyPanel.GetComponentInChildren<TextMeshProUGUI>(); // Assuming TextMeshProUGUI is a child of dummyPanel
     }
 
     private void Start()
@@ -51,6 +58,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         // Implement logic for UI, e.g., showing the main menu
+        Debug.Log("Connected to Master");
     }
 
     public void CreateGame()
@@ -110,6 +118,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         //{
             photonView.RPC("LoadGameplayScene", RpcTarget.AllBuffered);
         //}
+        UpdatePlayerList();
 
     }
 
@@ -128,14 +137,50 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        Debug.Log("In 'OnPlayerEnteredRoom' ");
+        UpdatePlayerList();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        Debug.Log("In 'onPlayerLeftRoom' ");
+        UpdatePlayerList();
+    }
+
+    private void UpdatePlayerList()
+    {
+        Debug.Log("In 'Update player list' ");
+        if (PhotonNetwork.CurrentRoom != null)
+        {
+            StringBuilder playerList = new StringBuilder();
+
+            if (PhotonNetwork.PlayerList.Length == 0)
+            {
+                Debug.Log("Player list is empty.");
+            }
+            else
+            {
+                string temp_user = userManager.GetUserDisplayName();
+                Debug.Log("Player list updated. Players in the room: \n" + temp_user);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("CurrentRoom is null. Cannot update player list.");
+        }
+    }
+
     [PunRPC]
     private void LoadGameplayScene()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            lobbyPanel.SetActive(false);
-            gameplayPanel.SetActive(true);
-            PhotonNetwork.LoadLevel("GameplayScene");
+            roomPanel.SetActive(false);
+            //gameplayPanel.SetActive(true);
+            //PhotonNetwork.LoadLevel("GameplayScene");
         }
     }
 

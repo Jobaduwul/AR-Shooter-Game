@@ -33,4 +33,17 @@ public class UserManager : MonoBehaviour
             Debug.Log("UserManager: CurrentUser is null.");
         }
     }
+
+    public string GetUserDisplayName()
+    {
+        if (currentUser != null)
+        {
+            return currentUser.DisplayName;
+        }
+        else
+        {
+            Debug.LogWarning("UserManager: CurrentUser is null. Cannot retrieve display name.");
+            return null; // You may want to return an empty string or handle this case differently based on your requirements.
+        }
+    }
 }
