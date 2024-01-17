@@ -130,18 +130,31 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        // Set the player's nickname when they join the room
-        string displayName = userManager.GetUserDisplayName(); // Replace with your logic to get the display name
+        string displayName = userManager.GetUserDisplayName(); // Your existing logic
         PhotonNetwork.NickName = displayName;
 
-        UpdatePlayerCustomProperties(); 
-        UpdatePlayerList();
+        photonView.RPC("UpdatePlayerCustomProperties_RPC", RpcTarget.AllBuffered);
+        photonView.RPC("UpdatePlayerList_RPC", RpcTarget.AllBuffered);
 
         if (PhotonNetwork.CurrentRoom != null && PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
         {
             photonView.RPC("LoadGameplayScene", RpcTarget.AllBuffered);
         }
     }
+
+
+    [PunRPC]
+    private void UpdatePlayerCustomProperties_RPC()
+    {
+        UpdatePlayerCustomProperties();
+    }
+
+    [PunRPC]
+    private void UpdatePlayerList_RPC()
+    {
+        UpdatePlayerList();
+    }
+
 
 
     public void Ready()
