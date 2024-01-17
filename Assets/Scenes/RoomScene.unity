@@ -1071,7 +1071,7 @@ GameObject:
   - component: {fileID: 872301424}
   - component: {fileID: 872301425}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: PlayerJoinPrompt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1124,7 +1124,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Omuk has joined the room
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1261,74 +1261,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 897d690816a9a454298b2be50a3a850a, type: 3}
---- !u!1001 &957498978
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 877.5134
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1199.2462
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3.0698028
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 686691874001739661, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9141106268269739542, guid: 8adcdd87a6823d2419af951a4d717e9f,
-        type: 3}
-      propertyPath: m_Name
-      value: UserManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8adcdd87a6823d2419af951a4d717e9f, type: 3}
 --- !u!1 &975395521
 GameObject:
   m_ObjectHideFlags: 0
@@ -2157,10 +2089,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca6a827831ad72c47a09dc55c838243b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userManager: {fileID: 1638773336}
-  photonView: {fileID: 0}
+  photonView: {fileID: 1422265445}
   playerListText: {fileID: 872301425}
   roomCodeText: {fileID: 1599162746}
+  playerJoinPrompt: {fileID: 872301425}
   lobbyPanel: {fileID: 160024953}
   roomPanel: {fileID: 1963474522}
   gameplayPanel: {fileID: 415320075}
@@ -2874,18 +2806,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 529483584}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1638773336 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2819291637076019442, guid: 8adcdd87a6823d2419af951a4d717e9f,
-    type: 3}
-  m_PrefabInstance: {fileID: 957498978}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 445d805752fb9e44aa0f8fb04b9cfd66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1873611363
 GameObject:
   m_ObjectHideFlags: 0
@@ -3305,7 +3225,6 @@ SceneRoots:
   - {fileID: 1932099032}
   - {fileID: 1350366806}
   - {fileID: 246002146}
-  - {fileID: 957498978}
   - {fileID: 1422265441}
   - {fileID: 318963473766599563}
   - {fileID: 935873904}
