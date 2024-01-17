@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         };
 
         PhotonNetwork.CreateRoom(newRoomCode, roomOptions);
-        PhotonNetwork.JoinRoom(newRoomCode);
+        //PhotonNetwork.JoinRoom(newRoomCode);
 
         UIhandler(newRoomCode);
     }
@@ -130,6 +130,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        // Set the player's nickname when they join the room
+        string displayName = userManager.GetUserDisplayName(); // Replace with your logic to get the display name
+        PhotonNetwork.NickName = displayName;
+
         UpdatePlayerCustomProperties(); 
         UpdatePlayerList();
 
@@ -155,67 +159,33 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-
-    // public override void OnPlayerEnteredRoom(Player newPlayer)
-    // {
-    //     Debug.Log("In 'OnPlayerEnteredRoom' ");
-    //     UpdatePlayerList();
-    //     UpdatePlayerCustomProperties(); // Update custom properties when a player joins
-    // }
-
-    // public override void OnPlayerLeftRoom(Player otherPlayer)
-    // {
-    //     Debug.Log("In 'onPlayerLeftRoom' ");
-    //     UpdatePlayerList();
-    //     UpdatePlayerCustomProperties(); // Update custom properties when a player leaves
-    // }
-
     private void UpdatePlayerList()
     {
         if (PhotonNetwork.CurrentRoom != null)
         {
-            StringBuilder playerList = new StringBuilder();
+            StringBuilder playerListBuilder = new StringBuilder();
 
-            foreach (Player player in PhotonNetwork.PlayerList)
+            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
             {
-                string playerName = (string)player.CustomProperties["DisplayName"];
-                int playerHealth = (int)player.CustomProperties["Health"];
-                playerList.AppendLine($"{playerName} - Health: {playerHealth}");
+                string playerName = player.NickName;
+                int hitCount = player.CustomProperties.ContainsKey("HitCount") ? (int)player.CustomProperties["HitCount"] : 0;
+                
+                playerListBuilder.AppendLine($"{playerName}: {hitCount}");
             }
 
-            // Update the player list text
-            playerListText.text = playerList.ToString();
-        }
-        else
-        {
-            Debug.LogWarning("CurrentRoom is null. Cannot update player list.");
+            playerListText.text = playerListBuilder.ToString();
         }
     }
 
-
-    
     private void UpdatePlayerCustomProperties()
     {
-        string localPlayerId = PhotonNetwork.LocalPlayer.UserId;
-        string temp_user = userManager.GetUserDisplayName();
-
-        // Create a hashtable to store custom properties
-        ExitGames.Client.Photon.Hashtable playerCustomProperties = new ExitGames.Client.Photon.Hashtable();
-
-        // Add custom properties
-        playerCustomProperties.Add("Id", localPlayerId);
-        playerCustomProperties.Add("DisplayName", temp_user);
-        playerCustomProperties.Add("Health", 10); // Assuming Health is an integer property
-        playerCustomProperties.Add("MarkerName", "marker1");
-
-        // Set custom properties for the local player
-        PhotonNetwork.LocalPlayer.SetCustomProperties(playerCustomProperties);
-
-        // Debug logs for information
-        Debug.Log("Updated custom properties for local player:");
-        Debug.Log("Player ID: " + localPlayerId);
-        Debug.Log("Display Name: " + temp_user);
-        Debug.Log("Health: " + PhotonNetwork.LocalPlayer.CustomProperties["Health"]);
+        if (PhotonNetwork.LocalPlayer != null)
+        {
+            // Set the initial hit count to 0
+            ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+            customProperties["HitCount"] = 0;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        }
     }
 
 
