@@ -25,7 +25,6 @@ public class MarkerDetectionManager : MonoBehaviour
         }
     }
 
-    // New method to check if any marker is being tracked
     public bool IsTrackingAnyMarker()
     {
         foreach (var trackedImage in trackedImageManager.trackables)

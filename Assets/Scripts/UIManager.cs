@@ -5,18 +5,18 @@ public class UIManager : MonoBehaviour
 {
     public TMP_Text counterText;
 
-    public void UpdateCounter1Text()
+    public void UpdateCounter1Text(string counter)
     {
-        counterText.text = "Shot Player 1";
+        counterText.text = counter;
     }
 
-    public void UpdateCounter2Text()
+    public void UpdateCounter2Text(string counter)
     {
-        counterText.text = "Shot Player 2";
+        counterText.text = counter;
     }
 
-    public void UpdateCounter3Text()
+    public void UpdateCounter3Text(string counter)
     {
-        counterText.text = "Shot Player 3";
+        counterText.text = counter;
     }
 }
