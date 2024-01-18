@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private UserManager userManager;
 
+    public MarkerDetectionManager markerDetectionManager;
+
     public PhotonView photonView;
 
     public TextMeshProUGUI playerListText;
@@ -313,6 +315,14 @@ public class GameManager : MonoBehaviourPunCallbacks
                 gameplayPanel.SetActive(true);
             }
         }
+
+        base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);
+
+        if (changedProps.ContainsKey("HitCount"))
+        {
+            // Refresh the player list when a player's hit count changes
+            UpdatePlayerList();
+        }
     }
 
     private void UpdatePlayerList()
@@ -325,13 +335,13 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 string playerName = player.NickName;
                 int hitCount = player.CustomProperties.ContainsKey("HitCount") ? (int)player.CustomProperties["HitCount"] : 0;
-                
                 playerListBuilder.AppendLine($"{playerName}: {hitCount}");
             }
 
             playerListText.text = playerListBuilder.ToString();
         }
     }
+
 
     private void UpdatePlayerCustomProperties()
     {
@@ -378,4 +388,43 @@ public class GameManager : MonoBehaviourPunCallbacks
         //to be deleted later
         dummyPanel.SetActive(true);
     }
+
+    public void IncreaseLocalPlayerHitCount()
+    {
+        if (PhotonNetwork.LocalPlayer != null)
+        {
+            if(markerDetectionManager.IsTrackingAnyMarker()){
+                int currentHitCount = PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("HitCount") ? (int)PhotonNetwork.LocalPlayer.CustomProperties["HitCount"] : 0;
+                currentHitCount++;
+                
+                // Update the local player's hit count
+                ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+                customProperties["HitCount"] = currentHitCount;
+                PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+
+                // Call the RPC to inform other players
+                photonView.RPC("UpdatePlayerHitCount_RPC", RpcTarget.Others, PhotonNetwork.LocalPlayer.UserId, currentHitCount);
+            }  
+        }
+    }
+
+    [PunRPC]
+    private void UpdatePlayerHitCount_RPC(string playerId, int newHitCount)
+    {
+        foreach (Player player in PhotonNetwork.PlayerList)
+        {
+            if (player.UserId == playerId)
+            {
+                ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+                customProperties["HitCount"] = newHitCount;
+                player.SetCustomProperties(customProperties);
+
+                // Update the player list for all clients
+                UpdatePlayerList();
+                break;
+            }
+        }
+    }
+
+
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class MarkerDetectionManager : MonoBehaviour
 {
@@ -22,5 +23,18 @@ public class MarkerDetectionManager : MonoBehaviour
         {
             markerProcessor.ProcessMarker(trackedImage);
         }
+    }
+
+    // New method to check if any marker is being tracked
+    public bool IsTrackingAnyMarker()
+    {
+        foreach (var trackedImage in trackedImageManager.trackables)
+        {
+            if (trackedImage.trackingState == TrackingState.Tracking)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
