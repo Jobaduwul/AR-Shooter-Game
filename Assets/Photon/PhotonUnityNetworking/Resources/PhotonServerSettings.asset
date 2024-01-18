@@ -46,6 +46,7 @@ MonoBehaviour:
   - UpdatePlayerCustomProperties_RPC
   - UpdatePlayerList_RPC
   - CalculateAndSetPlayerCount
+  - StartCountdown
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
