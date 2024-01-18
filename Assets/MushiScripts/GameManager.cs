@@ -7,6 +7,8 @@ using System.Text;
 
 using ExitGames.Client.Photon;
 
+using System.Collections;
+
 using System.Collections.Generic;
 
 
@@ -33,6 +35,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public GameObject dummyPanel;
 
+    public GameObject gameEndPanel;
+
+    private float countdownTimer = 60f; // 1 minute countdown
+    private bool countdownStarted = false;
+    public TextMeshProUGUI countdownText;
+
     //public Button readyButton;
     private const int roomCodeLength = 6;
     public TMP_InputField roomCodeInput;
@@ -48,6 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         dummyPanel.SetActive(false);
         gameplayPanel.SetActive(false);
+        gameEndPanel.SetActive(false);
 
         // Find UserManager in the scene and assign it
         userManager = FindObjectOfType<UserManager>();
@@ -89,7 +98,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         RoomOptions roomOptions = new RoomOptions
         {
             MaxPlayers = 3,
-            CustomRoomProperties = new Hashtable
+            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
             {
                 { "AutoSyncScene", true }
             },
@@ -186,8 +195,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         UpdatePlayerList();
     }
 
-
-
     [PunRPC]
     public void PlayerReady()
     {
@@ -256,11 +263,44 @@ public class GameManager : MonoBehaviourPunCallbacks
             Debug.Log("[GameManager] Waiting for all players to be ready.");
         }
 
+        if (allPlayersReady && !countdownStarted)
+        {
+            countdownStarted = true;
+            photonView.RPC("StartCountdown", RpcTarget.AllBuffered);
+        }
         return allPlayersReady;
     }
 
+    [PunRPC]
+    public void StartCountdown()
+    {
+        Debug.Log("Started counting down");
+        StartCoroutine(CountdownCoroutine());
+    }
 
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    private IEnumerator CountdownCoroutine()
+    {
+        while (countdownTimer >= 0)
+        {
+            countdownText.text = "Game ends in: " + countdownTimer.ToString("F0");
+            Debug.Log("Countdown: " + countdownTimer.ToString("F0"));
+            yield return new WaitForSeconds(1f);
+            countdownTimer--;
+        }
+
+        if(countdownTimer <= 0)
+        {
+            gameplayPanel.SetActive(false);
+            gameEndPanel.SetActive(true);
+        }
+
+        // Code to start the game or transition to the gameplay scene
+        // For example: LoadGameplayScene();
+    }
+
+
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
         if (changedProps.ContainsKey("IsPlayerReady"))
         {
