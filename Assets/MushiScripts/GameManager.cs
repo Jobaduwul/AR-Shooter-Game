@@ -39,11 +39,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public GameObject gameEndPanel;
 
-    private float countdownTimer = 60f; // 1 minute countdown
+    private float countdownTimer = 90f;
     private bool countdownStarted = false;
     public TextMeshProUGUI countdownText;
 
-    //public Button readyButton;
+    
     private const int roomCodeLength = 6;
     public TMP_InputField roomCodeInput;
 
@@ -60,7 +60,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         gameplayPanel.SetActive(false);
         gameEndPanel.SetActive(false);
 
-        // Find UserManager in the scene and assign it
         userManager = FindObjectOfType<UserManager>();
 
         if (userManager == null)
@@ -88,7 +87,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        // Implement logic for UI, e.g., showing the main menu
         Debug.Log("Connected to Master");
     }
 
@@ -108,7 +106,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         };
 
         PhotonNetwork.CreateRoom(newRoomCode, roomOptions);
-        //PhotonNetwork.JoinRoom(newRoomCode);
 
         UIhandler(newRoomCode);
     }
@@ -135,7 +132,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void ForDebug()
     {
-        //for debug only
         string roomCode = roomCodeInput.text.ToUpper();
         Debug.Log("The room is" + roomCode);
         
@@ -147,7 +143,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (userManager == null)
         {
-            displayName = "TestUser"; // Set the default display name to "test" if it's null or empty
+            displayName = "TestUser";
         }
         else
         {
